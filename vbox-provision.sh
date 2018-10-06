@@ -31,9 +31,11 @@ source ~/.bash_profile
 rbenv install -v 2.3.1
 rbenv global 2.3.1
 rbenv rehash
+# gem update
 gem install bundler
 cd "/vagrant/rails"
 gem install nokogiri -v '1.6.8'
 bundle install
-sudo -E env "PATH=$PATH" thin -p 81 -P /vagrant/rails/tmp/pids/thin.pid -l /vagrant/rails/logs/thin.log -d start
+# run this line to manually start rails
+sudo -E env "PATH=$PATH" thin -p 81 -P /vagrant/rails/tmp/pids/thin.pid -l /vagrant/rails/log/thin.log -d -e production start
 echo "DONE!"

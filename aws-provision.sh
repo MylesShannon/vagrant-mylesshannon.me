@@ -14,9 +14,10 @@ sudo chown -R ubuntu ~/.composer
 composer global require "laravel/installer"
 cd "/vagrant/laravel"
 composer install
-sudo chgrp -R www-data /vagrant
-sudo chmod -R 775 /vagrant
-sudo chmod -R 777 /vagrant/storage
+# next 3 lines need to be run after `vagrant reload`
+sudo chgrp -R www-data /vagrant/laravel
+sudo chmod -R 775 /vagrant/laravel
+sudo chmod -R 777 /vagrant/laravel/storage
 sudo a2dissite 000-default
 mkdir "/home/ubuntu/logs"
 printf "<VirtualHost *:80>\n  DocumentRoot /vagrant/laravel/public\n  ServerName api.mylesshannon.me\n  ServerAlias *.mylesshannon.me\n ErrorLog /home/ubuntu/logs/laravel-api-error.log\n CustomLog /home/ubuntu/logs/laravel-api-access.log combined\n  <Directory /vagrant/laravel/public>\n   AllowOverride All\n   Require all granted\n </Directory>\n</VirtualHost>" | sudo tee /etc/apache2/sites-available/laravel-api.conf
@@ -34,9 +35,11 @@ source ~/.bash_profile
 rbenv install -v 2.3.1
 rbenv global 2.3.1
 rbenv rehash
+# gem update
 gem install bundler
 cd "/vagrant/rails"
 gem install nokogiri -v '1.6.8'
 bundle install
-sudo -E env "PATH=$PATH" thin -p 81 -P /vagrant/rails/tmp/pids/thin.pid -l /vagrant/rails/logs/thin.log -d start
+# run this line to manually start rails
+sudo -E env "PATH=$PATH" thin -p 81 -P /vagrant/rails/tmp/pids/thin.pid -l /vagrant/rails/log/thin.log -d -e production start
 echo "DONE!"
